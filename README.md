@@ -1,3 +1,7 @@
+```console
+conda install -c bioconda stringtie fastqc trim-galore sortmerna rsem picard bedtools samtools star ucsc-bedgraphtobigwig hisat2 qualimap bioconductor-dupradar preseq bioconductor-deseq2 multiqc cutadapt salmon bioconductor-tximport bioconductor-tximeta rseqc r-pheatmap subread ucsc-bedclip
+```
+
 # ![nf-core/rnaseq](docs/images/nf-core-rnaseq_logo.png)
 
 [![GitHub Actions CI Status](https://github.com/nf-core/rnaseq/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/rnaseq/actions?query=workflow%3A%22nf-core+CI%22)
