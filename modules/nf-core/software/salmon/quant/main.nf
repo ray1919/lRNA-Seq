@@ -36,9 +36,11 @@ process SALMON_QUANT {
 
     def reference   = "--index $index"
     def input_reads = meta.single_end ? "-r $reads" : "-1 ${reads[0]} -2 ${reads[1]}"
+    def gencode     = ''
     if (alignment_mode) {
         reference   = "-t $transcript_fasta"
         input_reads = "-a $reads"
+        gencode     = params.gencode ? '--gencode' : ''
     }
 
     def strandedness_opts = [
@@ -69,6 +71,7 @@ process SALMON_QUANT {
         --libType=$strandedness \\
         $reference \\
         $input_reads \\
+        $gencode \\
         $options.args \\
         -o $prefix
 

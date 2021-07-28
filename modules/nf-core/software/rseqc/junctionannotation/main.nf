@@ -20,6 +20,7 @@ process RSEQC_JUNCTIONANNOTATION {
 
     input:
     tuple val(meta), path(bam)
+    tuple val(meta2), path(bai)
     path  bed
 
     output:
