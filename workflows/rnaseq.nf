@@ -541,6 +541,18 @@ workflow RNASEQ {
             ch_genome_bam_index  = MARK_DUPLICATES_PICARD.out.csi
         }
         ch_software_versions      = ch_software_versions.mix(MARK_DUPLICATES_PICARD.out.picard_version.first().ifEmpty(null))
+        // add bam_bai channel
+        MARK_DUPLICATES_PICARD.out.bam
+            .join(MARK_DUPLICATES_PICARD.out.bai, by: [0], remainder: true)
+            .join(MARK_DUPLICATES_PICARD.out.csi, by: [0], remainder: true)
+            .map {  meta, bam, bai, csi ->
+                if (bai) {
+                    [ meta, bam, bai ]
+                } else {
+                    [ meta, bam, csi ]
+                }
+            }
+            .set { ch_genome_bam_bai }
     }
 
     //
@@ -644,7 +656,7 @@ workflow RNASEQ {
         if (!params.skip_rseqc && rseqc_modules.size() > 0) {
             RSEQC (
                 ch_genome_bam,
-                ch_genome_bam_index,
+                ch_genome_bam_bai,
                 PREPARE_GENOME.out.gene_bed,
                 rseqc_modules
             )

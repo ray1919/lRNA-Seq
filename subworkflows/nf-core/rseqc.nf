@@ -20,8 +20,8 @@ include { RSEQC_READDUPLICATION    } from '../../modules/nf-core/software/rseqc/
 
 workflow RSEQC {
     take:
-    bam           // channel: [ val(meta), [ ban ] ]
-    bai
+    bam           // channel: [ val(meta), [ bam ] ]
+    bam_bai       // channel: [ val(meta), [ bam ], [ bai ] ]
     bed           //    file: /path/to/genome.bed
     rseqc_modules //    list: rseqc modules to run
 
@@ -77,7 +77,7 @@ workflow RSEQC {
     junctionannotation_rscript      = Channel.empty()
     junctionannotation_log          = Channel.empty()
     if ('junction_annotation' in rseqc_modules) {
-        RSEQC_JUNCTIONANNOTATION ( bam, bai, bed )
+        RSEQC_JUNCTIONANNOTATION ( bam_bai, bed )
         junctionannotation_bed          = RSEQC_JUNCTIONANNOTATION.out.bed
         junctionannotation_interact_bed = RSEQC_JUNCTIONANNOTATION.out.interact_bed
         junctionannotation_xls          = RSEQC_JUNCTIONANNOTATION.out.xls

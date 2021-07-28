@@ -57,6 +57,7 @@ process SORTMERNA {
             --reads ${reads[0]} \\
             --reads ${reads[1]} \\
             --threads $task.cpus \\
+            -m 30720 \\
             --workdir . \\
             --aligned rRNA_reads \\
             --other non_rRNA_reads \\
