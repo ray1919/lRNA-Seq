@@ -1,8 +1,8 @@
-/home/zhaorui/pt011/tools/rnaseq/rrna/rfam-5.8s-database-id98.fasta
-/home/zhaorui/pt011/tools/rnaseq/rrna/rfam-5s-database-id98.fasta
-/home/zhaorui/pt011/tools/rnaseq/rrna/silva-arc-16s-id95.fasta
-/home/zhaorui/pt011/tools/rnaseq/rrna/silva-arc-23s-id98.fasta
-/home/zhaorui/pt011/tools/rnaseq/rrna/silva-bac-16s-id90.fasta
-/home/zhaorui/pt011/tools/rnaseq/rrna/silva-bac-23s-id98.fasta
-/home/zhaorui/pt011/tools/rnaseq/rrna/silva-euk-18s-id95.fasta
-/home/zhaorui/pt011/tools/rnaseq/rrna/silva-euk-28s-id98.fasta
+/Business/gene_company/zhaorui/pt011/scripts/lRNA-Seq/assets/rrna/rfam-5.8s-database-id98.fasta
+/Business/gene_company/zhaorui/pt011/scripts/lRNA-Seq/assets/rrna/rfam-5s-database-id98.fasta
+/Business/gene_company/zhaorui/pt011/scripts/lRNA-Seq/assets/rrna/silva-arc-16s-id95.fasta
+/Business/gene_company/zhaorui/pt011/scripts/lRNA-Seq/assets/rrna/silva-arc-23s-id98.fasta
+/Business/gene_company/zhaorui/pt011/scripts/lRNA-Seq/assets/rrna/silva-bac-16s-id90.fasta
+/Business/gene_company/zhaorui/pt011/scripts/lRNA-Seq/assets/rrna/silva-bac-23s-id98.fasta
+/Business/gene_company/zhaorui/pt011/scripts/lRNA-Seq/assets/rrna/silva-euk-18s-id95.fasta
+/Business/gene_company/zhaorui/pt011/scripts/lRNA-Seq/assets/rrna/silva-euk-28s-id98.fasta

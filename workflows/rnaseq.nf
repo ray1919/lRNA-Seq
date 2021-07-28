@@ -121,6 +121,9 @@ if (!params.save_reference)  { salmon_index_options['publish_files'] = false }
 def salmon_quant_options   = modules['salmon_quant']
 salmon_quant_options.args += params.save_unaligned ? Utils.joinModuleArgs(['--writeUnmappedNames']) : ''
 
+def star_salmon_quant_options   = modules['star_salmon_quant']
+star_salmon_quant_options.args += params.gencode ? Utils.joinModuleArgs(['--gencode']) : ''
+
 def samtools_sort_genome_options  = modules['samtools_sort_genome']
 def samtools_index_genome_options = modules['samtools_index_genome']
 samtools_index_genome_options.args += params.bam_csi_index ? Utils.joinModuleArgs(['-c']) : ''
@@ -141,7 +144,7 @@ if (['star_salmon','hisat2'].contains(params.aligner)) {
 include { INPUT_CHECK    } from '../subworkflows/local/input_check'    addParams( options: [:] )
 include { PREPARE_GENOME } from '../subworkflows/local/prepare_genome' addParams( genome_options: publish_genome_options, index_options: publish_index_options, gffread_options: gffread_options,  star_index_options: star_genomegenerate_options,  hisat2_index_options: hisat2_build_options, rsem_index_options: rsem_preparereference_options, salmon_index_options: salmon_index_options )
 include { QUANTIFY_RSEM  } from '../subworkflows/local/quantify_rsem'  addParams( calculateexpression_options: rsem_calculateexpression_options, samtools_sort_options: samtools_sort_genome_options, samtools_index_options: samtools_index_genome_options, samtools_stats_options: samtools_index_genome_options, merge_counts_options: modules['rsem_merge_counts'] )
-include { QUANTIFY_SALMON as QUANTIFY_STAR_SALMON } from '../subworkflows/local/quantify_salmon'    addParams( genome_options: publish_genome_options, tximport_options: modules['star_salmon_tximport'], salmon_quant_options: modules['star_salmon_quant'], merge_counts_options: modules['star_salmon_merge_counts'] )
+include { QUANTIFY_SALMON as QUANTIFY_STAR_SALMON } from '../subworkflows/local/quantify_salmon'    addParams( genome_options: publish_genome_options, tximport_options: modules['star_salmon_tximport'], star_salmon_quant_options: star_salmon_quant_options, merge_counts_options: modules['star_salmon_merge_counts'] )
 include { QUANTIFY_SALMON as QUANTIFY_SALMON      } from '../subworkflows/local/quantify_salmon'    addParams( genome_options: publish_genome_options, tximport_options: modules['salmon_tximport'], salmon_quant_options: salmon_quant_options, merge_counts_options: modules['salmon_merge_counts'] )
 
 /*
