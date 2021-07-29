@@ -1,6 +1,26 @@
+fork nf-core/rnaser as long rna-seq workflow
+===================
+
+main change:
+
+1. adapt wf to run in LSF excutor;
+2. include rrna fasta files inside repo;
+3. add human & mouse test config
+
+## install dependancies below
+
 ```console
 conda install -c bioconda stringtie fastqc trim-galore sortmerna rsem picard bedtools samtools star ucsc-bedgraphtobigwig hisat2 qualimap bioconductor-dupradar preseq bioconductor-deseq2 multiqc cutadapt salmon bioconductor-tximport bioconductor-tximeta rseqc r-pheatmap subread ucsc-bedclip
 ```
+
+## fix python qcmodule bug below
+
+edit `lib/python3.6/site-packges/qcmodule/SAM.py` line 3832, add `[0:3]` to splited output. Some bam files would make ValueError
+
+```python
+            # ValueError: too many values to unpack (expected 3)
+            (chrom, i_st, i_end) = i.split(":")[0:3]
+``
 
 # ![nf-core/rnaseq](docs/images/nf-core-rnaseq_logo.png)
 

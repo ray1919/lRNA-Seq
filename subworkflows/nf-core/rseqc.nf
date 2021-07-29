@@ -21,7 +21,7 @@ include { RSEQC_READDUPLICATION    } from '../../modules/nf-core/software/rseqc/
 workflow RSEQC {
     take:
     bam           // channel: [ val(meta), [ bam ] ]
-    bam_bai       // channel: [ val(meta), [ bam ], [ bai ] ]
+    bam_bai
     bed           //    file: /path/to/genome.bed
     rseqc_modules //    list: rseqc modules to run
 
