@@ -20,9 +20,8 @@ edit `lib/python3.6/site-packges/qcmodule/SAM.py` line 3832, add `[0:3]` to spli
 ```python
             # ValueError: too many values to unpack (expected 3)
             (chrom, i_st, i_end) = i.split(":")[0:3]
-``
-
-# ![nf-core/rnaseq](docs/images/nf-core-rnaseq_logo.png)
+```
+## Original Repo readme
 
 [![GitHub Actions CI Status](https://github.com/nf-core/rnaseq/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/rnaseq/actions?query=workflow%3A%22nf-core+CI%22)
 [![GitHub Actions Linting Status](https://github.com/nf-core/rnaseq/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/rnaseq/actions?query=workflow%3A%22nf-core+linting%22)
