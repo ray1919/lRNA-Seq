@@ -120,6 +120,7 @@ if (!params.save_reference)  { salmon_index_options['publish_files'] = false }
 
 def salmon_quant_options   = modules['salmon_quant']
 salmon_quant_options.args += params.save_unaligned ? Utils.joinModuleArgs(['--writeUnmappedNames']) : ''
+// salmon_quant_options.args += params.save_align_intermeds ? Utils.joinModuleArgs(['--writeMappings=salmon_align.sam']) : ''
 
 def star_salmon_quant_options   = modules['star_salmon_quant']
 star_salmon_quant_options.args += params.gencode ? Utils.joinModuleArgs(['--gencode']) : ''
