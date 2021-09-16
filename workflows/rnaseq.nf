@@ -83,7 +83,7 @@ if (params.skip_alignment)  { multiqc_options['publish_dir'] = '' }
 def deseq2_qc_options                 = modules['deseq2_qc']
 deseq2_qc_options.args               += params.deseq2_vst ? Utils.joinModuleArgs(['--vst TRUE']) : ''
 def deseq2_qc_salmon_options          = deseq2_qc_options.clone()
-deseq2_qc_salmon_options.publish_dir  = "salmon/deseq2_qc"
+deseq2_qc_salmon_options.publish_dir  = "data/salmon/mapping/deseq2_qc"
 
 include { BEDTOOLS_GENOMECOV                 } from '../modules/local/bedtools_genomecov'          addParams( options: modules['bedtools_genomecov']                     )
 include { DESEQ2_QC as DESEQ2_QC_STAR_SALMON } from '../modules/local/deseq2_qc'                   addParams( options: deseq2_qc_options, multiqc_label: 'star_salmon'   )
@@ -161,7 +161,7 @@ def cat_fastq_options          = modules['cat_fastq']
 if (!params.save_merged_fastq) { cat_fastq_options['publish_files'] = false }
 
 def sortmerna_options           = modules['sortmerna']
-if (params.save_non_ribo_reads) { sortmerna_options.publish_files.put('fastq.gz','') }
+// if (params.save_non_ribo_reads) { sortmerna_options.publish_files.put('fastq.gz','') }
 
 def stringtie_options   = modules['stringtie']
 stringtie_options.args += params.stringtie_ignore_gtf ? '' : Utils.joinModuleArgs(['-e'])
@@ -214,7 +214,8 @@ if (['star_salmon','hisat2'].contains(params.aligner)) {
     }
 }
 
-include { FASTQC_UMITOOLS_TRIMGALORE } from '../subworkflows/nf-core/fastqc_umitools_trimgalore' addParams( fastqc_options: modules['fastqc'], umitools_options: umitools_extract_options, trimgalore_options: trimgalore_options )
+include { FASTP                      } from '../modules/nf-core/software/fastp/main'             addParams( options: modules['fastp']                 )
+//include { FASTQC_UMITOOLS_TRIMGALORE } from '../subworkflows/nf-core/fastqc_umitools_trimgalore' addParams( fastqc_options: modules['fastqc'], umitools_options: umitools_extract_options, trimgalore_options: trimgalore_options )
 include { ALIGN_STAR                 } from '../subworkflows/nf-core/align_star'                 addParams( align_options: star_align_options, samtools_sort_options: samtools_sort_genome_options, samtools_index_options: samtools_index_genome_options, samtools_stats_options: samtools_index_genome_options   )
 include { ALIGN_HISAT2               } from '../subworkflows/nf-core/align_hisat2'               addParams( align_options: hisat2_align_options, samtools_sort_options: samtools_sort_genome_options, samtools_index_options: samtools_index_genome_options, samtools_stats_options: samtools_index_genome_options )
 include { BAM_SORT_SAMTOOLS          } from '../subworkflows/nf-core/bam_sort_samtools'          addParams( sort_options: modules['samtools_sort_transcriptome'], index_options: modules['samtools_index_transcriptome'], stats_options: modules['samtools_index_transcriptome']      )
@@ -280,7 +281,7 @@ workflow RNASEQ {
     //
     // SUBWORKFLOW: Read QC, extract UMI and trim adapters
     //
-    FASTQC_UMITOOLS_TRIMGALORE (
+    /* FASTQC_UMITOOLS_TRIMGALORE (
         ch_cat_fastq,
         params.skip_fastqc || params.skip_qc,
         params.with_umi,
@@ -289,11 +290,18 @@ workflow RNASEQ {
     ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.fastqc_version.first().ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.umitools_version.first().ifEmpty(null))
     ch_software_versions = ch_software_versions.mix(FASTQC_UMITOOLS_TRIMGALORE.out.trimgalore_version.first().ifEmpty(null))
+    */
+
+    FASTP (
+        ch_cat_fastq
+    )
+    ch_trimmed_reads = FASTP.out.reads
+    ch_software_versions = ch_software_versions.mix(FASTP.out.version.first().ifEmpty(null))
 
     //
     // MODULE: Remove ribosomal RNA reads
     //
-    ch_trimmed_reads     = FASTQC_UMITOOLS_TRIMGALORE.out.reads
+    // ch_trimmed_reads     = FASTQC_UMITOOLS_TRIMGALORE.out.reads
     ch_sortmerna_multiqc = Channel.empty()
     if (params.remove_ribo_rna) {
         ch_sortmerna_fasta = Channel.from(ch_ribo_db.readLines()).map { row -> file(row) }.collect()
@@ -751,9 +759,10 @@ workflow RNASEQ {
             ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'),
             ch_fail_mapping_multiqc.ifEmpty([]),
             ch_fail_strand_multiqc.ifEmpty([]),
-            FASTQC_UMITOOLS_TRIMGALORE.out.fastqc_zip.collect{it[1]}.ifEmpty([]),
-            FASTQC_UMITOOLS_TRIMGALORE.out.trim_zip.collect{it[1]}.ifEmpty([]),
-            FASTQC_UMITOOLS_TRIMGALORE.out.trim_log.collect{it[1]}.ifEmpty([]),
+            // FASTQC_UMITOOLS_TRIMGALORE.out.fastqc_zip.collect{it[1]}.ifEmpty([]),
+            // FASTQC_UMITOOLS_TRIMGALORE.out.trim_zip.collect{it[1]}.ifEmpty([]),
+            // FASTQC_UMITOOLS_TRIMGALORE.out.trim_log.collect{it[1]}.ifEmpty([]),
+            FASTP.out.json.collect{it[1]}.ifEmpty([]),
             ch_sortmerna_multiqc.collect{it[1]}.ifEmpty([]),
             ch_star_multiqc.collect{it[1]}.ifEmpty([]),
             ch_hisat2_multiqc.collect{it[1]}.ifEmpty([]),

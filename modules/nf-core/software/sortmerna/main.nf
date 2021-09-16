@@ -9,7 +9,12 @@ process SORTMERNA {
     label "process_high"
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
-        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), meta:meta, publish_by_meta:['id']) }
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:'data/sortmerna', meta:meta, publish_by_meta:['id']) },
+        pattern: "*.{log,txt}"
+    publishDir "${params.outdir}",
+        mode: params.publish_dir_mode,
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:'output/cleandata', meta:meta, publish_by_meta:['id']) },
+        pattern: "*.fastq.gz"
 
     conda (params.enable_conda ? "bioconda::sortmerna=4.2.0" : null)
     if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
