@@ -7,7 +7,7 @@ process SALMON_TXIMPORT {
     label "process_medium"
     publishDir "${params.outdir}",
         mode: params.publish_dir_mode,
-        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:getSoftwareName(task.process), meta:[:], publish_by_meta:[]) }
+        saveAs: { filename -> saveFiles(filename:filename, options:params.options, publish_dir:'', meta:[:], publish_by_meta:[]) }
 
     conda (params.enable_conda ? "bioconda::bioconductor-tximeta=1.8.0" : null)
     if (workflow.containerEngine == 'singularity' && !params.singularity_pull_docker_container) {
